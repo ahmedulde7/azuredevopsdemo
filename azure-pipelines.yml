@@ -15,11 +15,22 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
+- script: npx ng lint
+  displayName: 'Code Analysis'
+
+- script: npx ng test --watch=false --codeCoverage=true
+  displayName: 'Unit Test'  
+
 - script: |
-    ls
     cd sample-app
     npm install -g @angular/cli
     npm install
     ng build --prod
-    ls
   displayName: 'npm install and build'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'dist/sample-app'
+    ArtifactName: 'sample-app'
+    publishLocation: 'Container'
+  displayName: 'Publish Artifacts'  
