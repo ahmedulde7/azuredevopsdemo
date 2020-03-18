@@ -15,10 +15,14 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: npx ng lint
+- script: |
+    cd sample-app
+    npx ng lint
   displayName: 'Code Analysis'
 
-- script: npx ng test --watch=false --codeCoverage=true
+- script: |
+    cd sample-app 
+    npx ng test --watch=false --codeCoverage=true
   displayName: 'Unit Test'  
 
 - script: |
