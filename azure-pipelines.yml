@@ -34,7 +34,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'dist/sample-app'
+    PathtoPublish: 'sample-app/dist/sample-app'
     ArtifactName: 'sample-app'
     publishLocation: 'Container'
   displayName: 'Publish Artifacts'  
