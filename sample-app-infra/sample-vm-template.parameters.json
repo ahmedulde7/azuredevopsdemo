@@ -65,7 +65,7 @@
             "value": "appuser"
         },
         "adminPassword": {
-            "value": null
+            "value": "AppUser$1234"
         },
         "diagnosticsStorageAccountName": {
             "value": "rgsampleappdevcacdiag"
