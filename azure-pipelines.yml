@@ -42,7 +42,6 @@ stages:
     jobs:
       - deployment: DeployJob
         displayName: Deploy
-        dependsOn: Build
         environment:
           name:  DevSampleApp
           resourceType: VirtualMachine
