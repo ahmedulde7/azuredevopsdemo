@@ -51,12 +51,10 @@ stages:
           runOnce:
             deploy:
               steps:
-              - task: DownloadPipelineArtifacts
-                inputs:
-                  artifactName: distFolder
-                  downloadPath: '/opt/'
               - script: |
-                  ls
+                  sudo su
+                  cp $(Pipeline.Workspace)/* /opt/sampleapp/
+                  ls /opt/sampleapp/
                   npm install http-server -g
                   http-server /opt/sample-app/
                 
