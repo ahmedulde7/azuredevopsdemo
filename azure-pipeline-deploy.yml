@@ -1,3 +1,0 @@
-#copy dist from artifact
-npm install http-server -g
-http-server dist/sample-app/

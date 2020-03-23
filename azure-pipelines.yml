@@ -2,39 +2,62 @@
 # Build a Node.js project that uses Angular.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+#https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/deploy-linux-vm?view=azure-devops&tabs=java
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-group-phases?view=azure-devops&tabs=classic
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        displayName: Build
+        trigger:
+        - master
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '10.x'
+          displayName: 'Install Node.js'
+        - script: |
+            cd sample-app
+            npm install -g @angular/cli
+            npm install
+            npx ng lint
+          displayName: 'Code Analysis'
+        - script: |
+            cd sample-app 
+            npx ng test --watch=false --codeCoverage=true
+          displayName: 'Unit Test'  
+        - script: |
+            cd sample-app
+            ng build --prod
+          displayName: 'npm install and build'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: 'sample-app/dist/sample-app'
+            ArtifactName: 'sample-app'
+            publishLocation: 'Container'
+          displayName: 'Publish Artifacts'
+  - stage: Deploy
+    jobs:
+      - job: DeployJob
+        displayName: Deploy
+        environment:
+          name:  DevSampleApp
+          resourceType: VirtualMachine
+          tags: web
+        strategy: 
+          runOnce:
+            deploy:
+              steps:
+              - task: DownloadPipelineArtifacts
+                inputs:
+                  artifactName: distFolder
+                  downloadPath: '/opt/'
+              - script: |
+                  ls
+                  npm install http-server -g
+                  http-server /opt/dist/sample-app/
+                
 
-trigger:
-- master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-
-- script: |
-    cd sample-app
-    npm install -g @angular/cli
-    npm install
-    npx ng lint
-  displayName: 'Code Analysis'
-
-- script: |
-    cd sample-app 
-    npx ng test --watch=false --codeCoverage=true
-  displayName: 'Unit Test'  
-
-- script: |
-    cd sample-app
-    ng build --prod
-  displayName: 'npm install and build'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'sample-app/dist/sample-app'
-    ArtifactName: 'sample-app'
-    publishLocation: 'Container'
-  displayName: 'Publish Artifacts'  
