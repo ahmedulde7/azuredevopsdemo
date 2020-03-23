@@ -40,7 +40,7 @@ stages:
           displayName: 'Publish Artifacts'
   - stage: Deploy
     jobs:
-      - job: DeployJob
+      - deployment: DeployJob
         displayName: Deploy
         environment:
           name:  DevSampleApp
@@ -57,7 +57,7 @@ stages:
               - script: |
                   ls
                   npm install http-server -g
-                  http-server /opt/dist/sample-app/
+                  http-server /opt/sample-app/
                 
 
 
