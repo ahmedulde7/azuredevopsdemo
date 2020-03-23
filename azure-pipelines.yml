@@ -49,18 +49,19 @@ stages:
           tags: web
         strategy: 
           runOnce:
+            preDeploy:
+            steps:
+            - download: current
+              artifact: drop
+            - script: echo initialize, cleanup, backup, install certs
             deploy:
               steps:
               - script: |
                   sudo su
                   cp $(Pipeline.Workspace)/* /opt/sampleapp/
                   ls /opt/sampleapp/
-                  npm install http-server -g
-                  http-server /opt/sample-app/
-      - job: 
-          steps:
-          - script: |
-              echo "Deployment Running"
-                        
+                  # npm install http-server -g
+                  # http-server /opt/sample-app/
+
 
 
