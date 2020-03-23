@@ -57,6 +57,10 @@ stages:
                   ls /opt/sampleapp/
                   npm install http-server -g
                   http-server /opt/sample-app/
-                
+      - job: 
+          steps:
+          - script: |
+              echo "Deployment Running"
+                        
 
 
