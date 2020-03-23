@@ -6,11 +6,11 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-group-phases?view=azure-devops&tabs=classic
 stages:
   - stage: Build
+    trigger:
+      - master
     jobs:
       - job: BuildJob
         displayName: Build
-        trigger:
-        - master
         pool:
           vmImage: 'ubuntu-latest'
         steps:
@@ -42,6 +42,7 @@ stages:
     jobs:
       - deployment: DeployJob
         displayName: Deploy
+        dependsOn: Build
         environment:
           name:  DevSampleApp
           resourceType: VirtualMachine
