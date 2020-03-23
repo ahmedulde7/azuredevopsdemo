@@ -43,9 +43,8 @@ stages:
       - deployment: DeployJob
         displayName: Deploy
         environment:
-          name:  DevSampleApp
+          name:  sampleapp1
           resourceType: VirtualMachine
-          tags: web
         strategy: 
           runOnce:
             preDeploy:
