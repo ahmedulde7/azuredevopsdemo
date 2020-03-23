@@ -4,10 +4,10 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 #https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/deploy-linux-vm?view=azure-devops&tabs=java
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-group-phases?view=azure-devops&tabs=classic
+trigger:
+  - master
 stages:
   - stage: Build
-    trigger:
-      - master
     jobs:
       - job: BuildJob
         displayName: Build
