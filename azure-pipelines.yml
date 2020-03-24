@@ -32,12 +32,22 @@ stages:
             cd sample-app
             ng build --prod
           displayName: 'npm install and build'
-        - task: PublishBuildArtifacts@1
+        - task: ArchiveFiles@2
+          displayName: 'Archive files'
           inputs:
-            PathtoPublish: 'sample-app/dist/sample-app'
-            ArtifactName: 'sample-app'
-            publishLocation: 'Container'
-          displayName: 'Publish Artifacts'
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+            includeRootFolder: false
+            archiveType: zip
+            archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            replaceExistingArchive: true
+        - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          artifact: drop  
+        # - task: PublishBuildArtifacts@1
+        #   inputs:
+        #     PathtoPublish: 'sample-app/dist/sample-app'
+        #     ArtifactName: 'sample-app'
+        #     publishLocation: 'Container'
+        #   displayName: 'Publish Artifacts'
   - stage: Deploy
     jobs:
       - deployment: DeployJob
@@ -50,7 +60,7 @@ stages:
             preDeploy:
               steps:
               - download: current
-                artifact: sample-app
+                artifact: drop
               - script: |
                   sudo apt -y install nodejs
             deploy:
@@ -62,7 +72,7 @@ stages:
                     appType: webAppLinux
                     appName: sampleappclz
                     runtimeStack: 'NODE|10-lts'
-                    package: $(Pipeline.Workspace)/sample-app.zip
+                    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
                     startUpCommand: 'npm run start'
 
 
