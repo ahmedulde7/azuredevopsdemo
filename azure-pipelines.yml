@@ -51,18 +51,20 @@ stages:
               steps:
               - download: current
                 artifact: sample-app
-              - script: echo initialize, cleanup, backup, install certs
+              - script: |
+                  sudo apt install nodejs
             deploy:
               steps:
-              - task: NodeTool@0
-                inputs:
-                  versionSpec: '10.x'
-                displayName: 'Install Node.js'
-              - script: |
-                  sudo su
-                  echo $(Agent.BuildDirectory)
-                  npm install http-server -g
-                  http-server .
+                - task: AzureWebApp@1
+                  displayName: 'Azure Web App Deploy: sampleappclz'
+                  inputs:
+                    azureSubscription: MAM-ENB-CLZ-DEV-CAC
+                    appType: webAppLinux
+                    appName: sampleappclz
+                    runtimeStack: 'NODE|10.10'
+                    package: $(Pipeline.Workspace)/sample-app.zip
+                    startUpCommand: 'npm run start'
+
 
 
 
