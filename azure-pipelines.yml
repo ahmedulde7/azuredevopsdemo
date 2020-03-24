@@ -54,12 +54,15 @@ stages:
               - script: echo initialize, cleanup, backup, install certs
             deploy:
               steps:
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: '10.x'
+                displayName: 'Install Node.js'
               - script: |
                   sudo su
-                  cp $(Pipeline.Workspace)/* /opt/sampleapp/
-                  ls /opt/sampleapp/
-                  # npm install http-server -g
-                  # http-server /opt/sample-app/
+                  echo $(Agent.BuildDirectory)
+                  npm install http-server -g
+                  http-server .
 
 
 
