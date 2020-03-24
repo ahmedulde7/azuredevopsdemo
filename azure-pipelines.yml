@@ -50,7 +50,7 @@ stages:
             preDeploy:
               steps:
               - download: current
-                artifact: drop
+                artifact: sample-app
               - script: echo initialize, cleanup, backup, install certs
             deploy:
               steps:
