@@ -58,10 +58,10 @@ stages:
                 - task: AzureWebApp@1
                   displayName: 'Azure Web App Deploy: sampleappclz'
                   inputs:
-                    azureSubscription: MAM-ENB-CLZ-DEV-CAC
+                    azureSubscription: 'MAM-ENB-CLZ-DEV-CAC(3b6fcced-e885-40ae-8665-ee8aa330963c)'
                     appType: webAppLinux
                     appName: sampleappclz
-                    runtimeStack: 'NODE|10.10'
+                    runtimeStack: 'NODE|10-lts'
                     package: $(Pipeline.Workspace)/sample-app.zip
                     startUpCommand: 'npm run start'
 
