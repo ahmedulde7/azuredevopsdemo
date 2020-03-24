@@ -52,7 +52,7 @@ stages:
               - download: current
                 artifact: sample-app
               - script: |
-                  sudo apt install nodejs
+                  sudo apt -y install nodejs
             deploy:
               steps:
                 - task: AzureWebApp@1
