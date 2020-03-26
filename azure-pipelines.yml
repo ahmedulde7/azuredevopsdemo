@@ -32,48 +32,48 @@ stages:
             cd sample-app
             ng build --prod
           displayName: 'npm install and build'
-        - task: ArchiveFiles@2
-          displayName: 'Archive files'
-          inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-            includeRootFolder: false
-            archiveType: zip
-            archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-            replaceExistingArchive: true
-        - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-          artifact: drop  
-        # - task: PublishBuildArtifacts@1
+        # - task: ArchiveFiles@2
+        #   displayName: 'Archive files'
         #   inputs:
-        #     PathtoPublish: 'sample-app/dist/sample-app'
-        #     ArtifactName: 'sample-app'
-        #     publishLocation: 'Container'
-        #   displayName: 'Publish Artifacts'
-  - stage: Deploy
-    jobs:
-      - deployment: DeployJob
-        displayName: Deploy
-        environment:
-          name:  sampleapp1
-          resourceType: VirtualMachine
-        strategy: 
-          runOnce:
-            preDeploy:
-              steps:
-              - download: current
-                artifact: drop
-              - script: |
-                  sudo apt -y install nodejs
-            deploy:
-              steps:
-                - task: AzureWebApp@1
-                  displayName: 'Azure Web App Deploy: sampleappclz'
-                  inputs:
-                    azureSubscription: 'MAM-ENB-CLZ-DEV-CAC(3b6fcced-e885-40ae-8665-ee8aa330963c)'
-                    appType: webAppLinux
-                    appName: sampleappclz
-                    runtimeStack: 'NODE|10-lts'
-                    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-                    startUpCommand: 'npm run start'
+        #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        #     includeRootFolder: false
+        #     archiveType: zip
+        #     archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        #     replaceExistingArchive: true
+        # - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        #   artifact: drop  
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: 'sample-app/dist/sample-app'
+            ArtifactName: 'sample-app'
+            publishLocation: 'Container'
+          displayName: 'Publish Artifacts'
+  # - stage: Deploy
+  #   jobs:
+  #     - deployment: DeployJob
+  #       displayName: Deploy
+  #       environment:
+  #         name:  sampleapp1
+  #         resourceType: VirtualMachine
+  #       strategy: 
+  #         runOnce:
+  #           preDeploy:
+  #             steps:
+  #             - download: current
+  #               artifact: drop
+  #             - script: |
+  #                 sudo apt -y install nodejs
+  #           deploy:
+  #             steps:
+  #               - task: AzureWebApp@1
+  #                 displayName: 'Azure Web App Deploy: sampleappclz'
+  #                 inputs:
+  #                   azureSubscription: 'MAM-ENB-CLZ-DEV-CAC(3b6fcced-e885-40ae-8665-ee8aa330963c)'
+  #                   appType: webAppLinux
+  #                   appName: sampleappclz
+  #                   runtimeStack: 'NODE|10-lts'
+  #                   package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+  #                   startUpCommand: 'npm run start'
 
 
 
